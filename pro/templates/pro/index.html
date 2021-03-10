@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> {% block title %}
+    {% endblock  %}</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/cerulean/bootstrap.min.css">
+    <link rel="stylesheet" href="css/registration-form-with-bootstarp.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="{% static 'pro/js/form_angularjs_app.js' %}"></script>
+
+ <style>
+    .align-center {
+        margin: 0 auto;
+    }
+ </style>
+
+</head>
+<body>
+
+    {% verbatim %}
+    <div ng-app="webApp" class="container">
+        <div ng-controller="tickitingToolCtrl"  ng-cloak>
+
+            <div ng-init="app_config.addEntry = false;"></div>
+
+            <div class="container" ng-if="!app_config.addEntry">
+                <br>
+                <br>
+                <br>
+                <div style="text-align:right">
+                    <button type="button" class="btn btn-outline-primary" ng-click="app_config.addEntry = true;">Add</button>
+                </div>
+                <br>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tool</th>
+                            <th scope="col">Endpoint</th>
+                            <th scope="col">Auth. Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="tickiting_tool in tickiting_tools">
+                            <th scope="row">{{ $index + 1 }}</th>
+                            <td>{{ tickiting_tool.select_tool_display }}</td>
+                            <td>{{ tickiting_tool.endpoint }}</td>
+                            <td>{{ tickiting_tool.authentication_type_display }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div ng-if="!tickiting_tools.length">
+                    No data
+                </div>
+            </div>
+
+            <div class="container" ng-if="app_config.addEntry">
+                <br>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-xs-12 col-lg-6 align-center">
+                        <h4>Configure ticketing tool...</h4>
+                        <br>
+                        <form method="" action="">
+                            <div class="">
+                                <div class="form-group row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <label> Select Tool</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                <select class="form-control" ng-model="tickiting_tool_entry.select_tool">
+                                    <option value="abc">Abc</option>
+                                    <option value="efg">Efg</option>
+                                    <option value="xyz">Xyz</option>
+                                </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="form-group row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <label>Endpoint</label> 
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <input type="text" class="form-control" ng-model="tickiting_tool_entry.endpoint" size="10">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="form-group row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <label>Authentication Type</label>    
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <input type="radio" ng-model="tickiting_tool_entry.auth_type" id="auth-type-password" name="auth-type" value="password"> <label for="auth-type-password">Password</label>
+                                        <input type="radio" ng-model="tickiting_tool_entry.auth_type" id="auth-type-token" name="auth-type" value="token"> <label for="auth-type-token">Token</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="" ng-if="tickiting_tool_entry.auth_type == 'password'">
+                                <div class="form-group row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <label> Username</label> 
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <input type="text" class="form-control" ng-model="tickiting_tool_entry.username" size="10">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <label> Password</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <input type="password" class="form-control" ng-model="tickiting_tool_entry.password" size="10">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="" ng-if="tickiting_tool_entry.auth_type == 'token'">
+                                <div class="form-group row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <label> Token</label> 
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <input type="text" class="form-control" size="10" ng-model="tickiting_tool_entry.token">
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align:center">
+                                <button type="button" class="btn btn-outline-primary" ng-click="app_config.addEntry = false;">Go Back</button>
+                                <button type="button" class="btn btn-outline-primary" ng-click="addTickitingTool()">Continue</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endverbatim %}
+
+
+    {% block content %}
+
+    {% endblock  %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
